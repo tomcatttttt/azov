@@ -1,5 +1,7 @@
 package com.nik.customview
 
+import android.content.Context
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 

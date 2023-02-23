@@ -4,50 +4,82 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
+import kotlin.math.sin
 import android.view.View
+import kotlin.math.cos
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 
 class StarView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null
 ) : AppCompatButton(context, attrs) {
-    private var yellowColor = Color.YELLOW
-    private var blackColor = Color.BLACK
 
-    var counter = 1
-
-    override fun setOnClickListener(l: OnClickListener?) {
-        super.setOnClickListener(l)
-        Log.d("Tag", "huy")
-    }
-
-    private var paint: Paint = Paint(Paint.FILTER_BITMAP_FLAG)
-    private var path: Path = Path()
+    private val yellow = Color.YELLOW
+    private val black = Color.BLACK
+    private var counter = 0
+    private var firstStarColor = black
+    private var secondStarColor = black
+    private var thirdStarColor = black
+    private val paint = Paint(Paint.FILTER_BITMAP_FLAG)
+    private val path = Path()
 
     init {
-        findViewById<StarView>(R.id.starView).setOnClickListener(View.OnClickListener {
-            when (counter) {
-                1 -> { Log.d("ebat", "click 1") }
-
-                2 -> { Log.d("ebat", "click 2") }
-
-                3 -> { Log.d("ebat", "click 3") }
-
-                else -> { counter = 0
-                    paint.color = blackColor }
-            }
+        setOnClickListener {
             counter++
-        })
+            when (counter % 4) {
+                1 -> {
+                    firstStarColor = yellow
+                    secondStarColor = black
+                    thirdStarColor = black
+                    invalidate()
+                }
+                2 -> {
+                    firstStarColor = yellow
+                    secondStarColor = yellow
+                    thirdStarColor = black
+                    invalidate()
+                }
+                3 -> {
+                    firstStarColor = yellow
+                    secondStarColor = yellow
+                    thirdStarColor = yellow
+                    invalidate()
+                }
+                0 -> {
+                    firstStarColor = black
+                    secondStarColor = black
+                    thirdStarColor = black
+                    invalidate()
+                }
+            }
+        }
     }
 
-    override fun draw(canvas: Canvas) {
-        super.draw(canvas)
-        drawFirstAzov(canvas)
-        drawSecondAzov(canvas)
-        drawThirdAzov(canvas)
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        canvas?.let {
+            drawFirstAzov(firstStarColor, it)
+            it.save()
+            it.translate(width.toFloat() / 3.6234f, 0f)
+            drawFirstAzov(secondStarColor, it)
+            it.restore()
+            it.save()
+            it.translate(width.toFloat() / 1.80847f, 0f)
+            drawFirstAzov(thirdStarColor, it)
+            it.restore()
+        }
     }
 
-    private fun drawFirstAzov(canvas: Canvas)  {
+    private fun drawFirstAzov(color: Int, canvas: Canvas) {
+        paint.shader = LinearGradient(
+            0f, 0f, 0f,
+            height.toFloat(),
+            color,
+            Color.WHITE,
+            Shader.TileMode.MIRROR
+        )
+
         path.moveTo(width.toFloat() / 7.4f, 0f)
         path.lineTo(width.toFloat() / 7.4f, 367f)
         path.lineTo(width.toFloat() / 5.6f, 367f)
@@ -65,24 +97,8 @@ class StarView @JvmOverloads constructor(
         path.lineTo(width.toFloat() / 4.45f, 117f)
         path.lineTo(width.toFloat() / 4.45f, 233f)
         path.lineTo(width.toFloat() / 7.4f, 200f)
+
         path.close()
-        paint.color = blackColor
         canvas.drawPath(path, paint)
-        invalidate()
-    }
-
-    private fun drawSecondAzov(canvas: Canvas) {
-        canvas.save()
-        canvas.translate(width.toFloat() / 3.6234f, 0f)
-        drawFirstAzov(canvas)
-        canvas.restore()
-    }
-
-    private fun drawThirdAzov(canvas: Canvas) {
-        canvas.save()
-        canvas.translate(width.toFloat() / 1.80847f, 0f)
-        drawFirstAzov(canvas)
-        canvas.restore()
     }
 }
-

@@ -7,14 +7,16 @@
     tools:context=".MainActivity">
 
        <com.nik.customview.StarView
-           android:clickable="true"
            android:id="@+id/starView"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
+           android:layout_centerInParent="true"
            android:layout_centerHorizontal="true"
            android:layout_centerVertical="true"
-           android:layout_centerInParent="true"
-           tools:layout_editor_absoluteX="46dp"
-           tools:layout_editor_absoluteY="206dp"
-           android:focusable="true" />
+           android:clickable="true"
+           android:focusable="true"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
